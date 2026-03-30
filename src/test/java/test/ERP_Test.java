@@ -41,7 +41,7 @@ public class ERP_Test {
 
 		reporter = new ExtentHtmlReporter("./Reporter/ERP CRM Report.html");
 		reporter.config().setDocumentTitle("Automationreport");
-		reporter.config().setReportName("ERP CRM Report");
+		reporter.config().setReportName("ERP Report");
 		reporter.config().setTheme(Theme.STANDARD);
 		extent = new ExtentReports();
 		extent.attachReporter(reporter);
