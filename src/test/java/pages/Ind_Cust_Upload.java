@@ -158,7 +158,7 @@ public class Ind_Cust_Upload {
         // Click upload
         driver.findElement(upload_btn).click();
 
-        test3.log(Status.INFO, "Dynamic file uploaded");
+        test3.log(Status.INFO, "Individual customer file uploaded");
     }
 	
 }
