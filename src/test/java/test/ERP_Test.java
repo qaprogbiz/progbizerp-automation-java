@@ -24,6 +24,7 @@ import com.aventstack.extentreports.reporter.ExtentHtmlReporter;
 import com.aventstack.extentreports.reporter.configuration.Theme;
 
 import pages.Enquiry;
+import pages.Ind_Cust_Upload;
 import pages.Login;
 import pages.Quotation;
 import pages.Task;
@@ -42,7 +43,7 @@ public class ERP_Test {
 		reporter = new ExtentHtmlReporter("./Reporter/ERP CRM Report.html");
 		reporter.config().setDocumentTitle("Automation Report");
 		reporter.config().setReportName("ERP Report");
-		reporter.config().setTheme(Theme.DARK);
+		reporter.config().setTheme(Theme.STANDARD);
 		extent = new ExtentReports();
 		extent.attachReporter(reporter);
 		extent.setSystemInfo("Hostname", "localhost");
@@ -84,7 +85,7 @@ public class ERP_Test {
 
 	}
 	
-	@Test(priority = 2)
+//	@Test(priority = 2)
 	public void enquiry_create() throws Exception {
 
 		test = extent.createTest("Create enquiry");
@@ -109,7 +110,7 @@ public class ERP_Test {
 
 	}
 
-	@Test(priority = 5)
+//	@Test(priority = 5)
 	public void followup_from_enquiry_overiew() throws Exception {
 
 		test = extent.createTest("Enquiry followup from the enquiry overview");
@@ -118,7 +119,7 @@ public class ERP_Test {
 
 	}
 
-	@Test(priority = 6)
+//	@Test(priority = 6)
 	public void followup_details() throws Exception {
 
 		test = extent.createTest("Edit and delete a followup");
@@ -143,7 +144,7 @@ public class ERP_Test {
 		enq.enquiry_hot_followup();
 	}
 
-	@Test(priority = 9)
+//	@Test(priority = 9)
 	public void quotation() throws Exception {
 
 		test = extent.createTest("Quotation Test");
@@ -151,7 +152,7 @@ public class ERP_Test {
 		qt.quotation();
 	}
 
-	@Test(priority = 10)
+//	@Test(priority = 10)
 	public void edit_quotation() throws Exception {
 
 		test = extent.createTest("Edit Quotation");
@@ -159,7 +160,7 @@ public class ERP_Test {
 		qt.edit_quotation();
 	}
 
-	@Test(priority = 11)
+//	@Test(priority = 11)
 	public void view_quotation() throws Exception {
 
 		test = extent.createTest("View Quotation");
@@ -167,7 +168,7 @@ public class ERP_Test {
 		qt.view_quotation();
 	}
 
-	@Test(priority = 12)
+//	@Test(priority = 12)
 	public void quotation_followup() throws Exception {
 
 		test = extent.createTest("Quotation Followup");
@@ -175,12 +176,19 @@ public class ERP_Test {
 		qt.quotation_followup();
 	}
 
-	@Test(priority = 13)
+//	@Test(priority = 13)
 	public void task_test() throws Exception {
 		test=extent.createTest("Instant task creation and end");
 		Task task= new Task(driver);
 		task.create_instant_task();
 		task.task();
+	}
+	
+	@Test(priority = 14)
+	public void individual_customer_upload() throws Exception {
+		test = extent.createTest("Individual customer upload without branch");
+		Ind_Cust_Upload ind = new pages.Ind_Cust_Upload(driver,test);
+		ind.without_branch();
 	}
 	
 	@AfterTest
