@@ -190,6 +190,7 @@ public class ERP_Test {
 		Ind_Cust_Upload ind = new pages.Ind_Cust_Upload(driver,test);
 		ind.without_branch();
 		ind.without_file();
+		ind.upload_valid_ind_customer();
 	}
 	
 	@AfterTest
