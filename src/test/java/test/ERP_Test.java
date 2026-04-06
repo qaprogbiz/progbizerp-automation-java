@@ -189,6 +189,7 @@ public class ERP_Test {
 		test = extent.createTest("Individual customer upload without branch");
 		Ind_Cust_Upload ind = new pages.Ind_Cust_Upload(driver,test);
 		ind.without_branch();
+		ind.without_file();
 	}
 	
 	@AfterTest

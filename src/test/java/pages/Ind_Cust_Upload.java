@@ -6,6 +6,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.aventstack.extentreports.ExtentTest;
@@ -24,6 +25,7 @@ public class Ind_Cust_Upload {
 	
 	By upload_btn = By.xpath("//button[contains(text(),'Upload')]");
 	By branch_validation =By.xpath("//div[contains(@class,'validation-message') and contains(text(),'Please choose branch')]");
+	By file_validation = By.id("swal2-content");
 	
 //	Constructor
 	public Ind_Cust_Upload(WebDriver driver,ExtentTest test3) {
@@ -49,5 +51,26 @@ public class Ind_Cust_Upload {
 			System.out.println("Branch validation message is not displayed.");
 			test3.log(Status.FAIL, "Branch validation message is not displayed.");
 			}
+	}
+	
+	public void without_file() throws Exception {
+		
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		wait.until(ExpectedConditions.elementToBeClickable(branch));
+		WebElement Branch = driver.findElement(branch);
+		Select select_branch = new Select(Branch);
+		select_branch.selectByIndex(1);
+		
+		driver.findElement(upload_btn).click();
+		Thread.sleep(2000);
+		WebElement File_Validation = driver.findElement(file_validation);
+		if (File_Validation.isDisplayed()) {
+			System.out.println("File validation message is displayed as expected.");
+			test3.log(Status.PASS, "File validation message is displayed as expected.");
+		} else {
+			System.out.println("File validation message is not displayed.");
+			test3.log(Status.FAIL, "File validation message is not displayed.");
+		}
+		
 	}
 }
