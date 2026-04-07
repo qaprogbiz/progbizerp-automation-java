@@ -1,5 +1,6 @@
 package pages;
 
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.time.Duration;
 import java.util.Random;
@@ -81,9 +82,6 @@ public class Ind_Cust_Upload {
 		}
 		
 	}
-	
-	
-
 
     public static String getUniqueName() {
         return "John " + System.currentTimeMillis();
@@ -99,7 +97,7 @@ public class Ind_Cust_Upload {
     }
     public static String createDynamicCustomerFile() throws Exception {
 
-        String filePath = System.getProperty("user.dir") + "/testdata/Individual_File.xlsx";
+        String filePath = System.getProperty("user.dir") + "/testdata/valid_Individual_File.xlsx";
 
         String[] headers = {
         	    "Customer Name",
@@ -142,23 +140,109 @@ public class Ind_Cust_Upload {
 
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
-        wait.until(ExpectedConditions.elementToBeClickable(excel_upload_menu)).click();
-        wait.until(ExpectedConditions.elementToBeClickable(ind_upload_btn)).click();
-
-        // Select branch
         Select select = new Select(driver.findElement(branch));
         select.selectByIndex(1);
 
-        // Generate file dynamically
         String filePath = createDynamicCustomerFile();
 
-        // Upload
         driver.findElement(By.xpath("//input[@type='file']")).sendKeys(filePath);
 
-        // Click upload
         driver.findElement(upload_btn).click();
 
-        test3.log(Status.INFO, "Individual customer file uploaded");
+//        test3.log(Status.INFO, "Individual customer file uploaded");
+        Thread.sleep(2000);
+        By firstRow = By.xpath("//table//tbody//tr[1]");
+
+        WebElement row = wait.until(ExpectedConditions.visibilityOfElementLocated(firstRow));
+
+        String status = row.findElement(By.xpath("./td[5]")).getText().trim();
+        String errorCount = row.findElement(By.xpath("./td[6]")).getText().trim();
+        System.out.println("Status : " + status+" :: Errors : " + errorCount);
+
+        if (status.equalsIgnoreCase("Uploaded") && errorCount.equals("0")) {
+            test3.log(Status.PASS, "Upload successful with zero errors");
+        } else {
+            test3.log(Status.FAIL, "Upload failed. Status: " + status + ", Errors: " + errorCount);
+        }
+    }
+    
+    public static String create_invalid_file() throws Exception {
+    	
+    	String filePath = System.getProperty("user.dir") + "/testdata/invalid_Individual_File.xlsx";
+
+    	    Workbook wb = new XSSFWorkbook();
+    	    Sheet sheet = wb.createSheet("Customers");
+
+    	    String[] headers = {
+    	        "Customer Name", "Phone", "Email address",
+    	        "Address Line1", "Address Line2", "Address Line3",
+    	        "DOB", "Phone2", "Grade"
+    	    };
+
+    	    Row header = sheet.createRow(0);
+    	    for (int i = 0; i < headers.length; i++) {
+    	        header.createCell(i).setCellValue(headers[i]);
+    	    }
+            // Row 1 → Missing Customer Name
+            Row r1 = sheet.createRow(1);
+            r1.createCell(1).setCellValue("989898");
+            r1.createCell(3).setCellValue("Home address");
+            r1.createCell(8).setCellValue("Suspect");
+
+            // Row 2 → Missing Phone
+            Row r2 = sheet.createRow(2);
+            r2.createCell(0).setCellValue("John Doe");
+            r2.createCell(3).setCellValue("Home address");
+            r2.createCell(8).setCellValue("Suspect");
+
+            // Row 3 → Missing Address Line1
+            Row r3 = sheet.createRow(3);
+            r3.createCell(0).setCellValue("John Doe");
+            r3.createCell(1).setCellValue("989898");
+            r3.createCell(8).setCellValue("Suspect");
+            
+            // Row 4 → Missing Grade
+            Row r4 = sheet.createRow(4);
+            r4.createCell(0).setCellValue("John Doe");
+            r4.createCell(1).setCellValue("989898");
+            r4.createCell(3).setCellValue("Home address");
+
+    	    FileOutputStream fos = new FileOutputStream(filePath);
+    	    wb.write(fos);
+    	    wb.close();
+    	    fos.close();
+
+    	    return filePath;
+    }
+    
+    public void upload_invalid_ind_customer() throws Exception {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        
+        Thread.sleep(2000);
+        Select select = new Select(driver.findElement(branch));
+        select.selectByIndex(1);
+
+        String filePath = create_invalid_file();
+
+        driver.findElement(By.xpath("//input[@type='file']")).sendKeys(filePath);
+        driver.findElement(upload_btn).click();
+        
+        Thread.sleep(1000);
+        By firstRow = By.xpath("//table//tbody//tr[1]");
+        
+        WebElement row = wait.until(ExpectedConditions.visibilityOfElementLocated(firstRow));
+
+        String status1 = row.findElement(By.xpath("./td[5]")).getText().trim();
+        String error_Count = row.findElement(By.xpath("./td[6]")).getText().trim();
+        System.out.println("Status : " + status1+" :: Errors : " + error_Count);
+
+        if (status1.equalsIgnoreCase("Has Error") && error_Count.equals("4")) {
+            test3.log(Status.PASS, "Upload failed as expected with 4 errors");
+        } else {
+            test3.log(Status.FAIL, "Invalid file uploaded " + status1 + ", Errors: " + error_Count);
+        }
+
+    	
     }
 	
 }

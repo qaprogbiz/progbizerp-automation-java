@@ -191,6 +191,7 @@ public class ERP_Test {
 		ind.without_branch();
 		ind.without_file();
 		ind.upload_valid_ind_customer();
+		ind.upload_invalid_ind_customer();
 	}
 	
 	@AfterTest
