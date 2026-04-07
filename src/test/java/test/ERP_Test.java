@@ -184,7 +184,7 @@ public class ERP_Test {
 		task.task();
 	}
 	
-	@Test(priority = 14)
+//	@Test(priority = 14)
 	public void individual_customer_upload() throws Exception {
 		test = extent.createTest("Individual customer upload");
 		Ind_Cust_Upload ind = new pages.Ind_Cust_Upload(driver,test);
@@ -194,6 +194,18 @@ public class ERP_Test {
 		ind.upload_invalid_ind_customer();
 		ind.upload_mixed_ind_customer();
 	}
+	
+	@Test(priority = 15)
+	public void business_customer_upload() throws Exception {
+        test = extent.createTest("Business customer upload");
+        pages.BCustomer_Upload bus = new pages.BCustomer_Upload(driver,test);
+        bus.excelUploadMenu();
+        bus.uploadWithoutBranch();
+        bus.uploadWithoutFile();
+        bus.uploadValidBusinessCustomer();
+//        bus.uploadInvalidBusinessCustomer();
+//        bus.uploadMixedBusinessCustomer();
+    }
 	
 	@AfterTest
 	public void teardown() {
