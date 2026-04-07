@@ -242,6 +242,7 @@ public class Ind_Cust_Upload {
             test3.log(Status.FAIL, "Invalid file uploaded " + status1 + ", Errors: " + error_Count);
         }
 
+
     }
 	
 }

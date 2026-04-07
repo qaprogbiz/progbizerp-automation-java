@@ -194,7 +194,6 @@ public class ERP_Test {
 		ind.upload_invalid_ind_customer();
 	}
 	
-	
 	@AfterTest
 	public void teardown() {
 		extent.flush();
