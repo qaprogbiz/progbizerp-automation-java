@@ -35,6 +35,11 @@ public class Ind_Cust_Upload {
 	By file_validation = By.id("swal2-content");
 	By file_validation_ok_btn= By.xpath("//button[contains(@class,'swal2-confirm') and normalize-space()='OK']");
 	
+    By firstRow = By.xpath("//table//tbody//tr[1]");
+    By upload_status=By.xpath("./td[5]");
+    By table_error= By.xpath("./td[6]");
+    By upload_file = By.xpath("//input[@type='file']");
+
 //	Constructor
 	public Ind_Cust_Upload(WebDriver driver,ExtentTest test3) {
 		this.driver = driver;
@@ -99,17 +104,8 @@ public class Ind_Cust_Upload {
 
         String filePath = System.getProperty("user.dir") + "/testdata/valid_Individual_File.xlsx";
 
-        String[] headers = {
-        	    "Customer Name",
-        	    "Phone",
-        	    "Email address",
-        	    "Address Line1",
-        	    "Address Line2",
-        	    "Address Line3",
-        	    "DOB",
-        	    "Phone2",
-        	    "Grade"
-        	};
+        String[] headers = {"Customer Name","Phone","Email address","Address Line1","Address Line2",
+        	    "Address Line3","DOB","Phone2","Grade"};
         Workbook wb = new XSSFWorkbook();
         Sheet sheet = wb.createSheet("Customers");
 
@@ -145,18 +141,17 @@ public class Ind_Cust_Upload {
 
         String filePath = createDynamicCustomerFile();
 
-        driver.findElement(By.xpath("//input[@type='file']")).sendKeys(filePath);
+        driver.findElement(upload_file).sendKeys(filePath);
 
         driver.findElement(upload_btn).click();
 
-//        test3.log(Status.INFO, "Individual customer file uploaded");
+//      test3.log(Status.INFO, "Individual customer file uploaded");
         Thread.sleep(2000);
-        By firstRow = By.xpath("//table//tbody//tr[1]");
 
         WebElement row = wait.until(ExpectedConditions.visibilityOfElementLocated(firstRow));
 
-        String status = row.findElement(By.xpath("./td[5]")).getText().trim();
-        String errorCount = row.findElement(By.xpath("./td[6]")).getText().trim();
+        String status = row.findElement(upload_status).getText().trim();
+        String errorCount = row.findElement(table_error).getText().trim();
         System.out.println("Status : " + status+" :: Errors : " + errorCount);
 
         if (status.equalsIgnoreCase("Uploaded") && errorCount.equals("0")) {
@@ -224,16 +219,15 @@ public class Ind_Cust_Upload {
 
         String filePath = create_invalid_file();
 
-        driver.findElement(By.xpath("//input[@type='file']")).sendKeys(filePath);
+        driver.findElement(upload_file).sendKeys(filePath);
         driver.findElement(upload_btn).click();
         
         Thread.sleep(1000);
-        By firstRow = By.xpath("//table//tbody//tr[1]");
         
         WebElement row = wait.until(ExpectedConditions.visibilityOfElementLocated(firstRow));
 
-        String status1 = row.findElement(By.xpath("./td[5]")).getText().trim();
-        String error_Count = row.findElement(By.xpath("./td[6]")).getText().trim();
+        String status1 = row.findElement(upload_status).getText().trim();
+        String error_Count = row.findElement(table_error).getText().trim();
         System.out.println("Status : " + status1+" :: Errors : " + error_Count);
 
         if (status1.equalsIgnoreCase("Has Error") && error_Count.equals("4")) {
@@ -242,7 +236,77 @@ public class Ind_Cust_Upload {
             test3.log(Status.FAIL, "Invalid file uploaded " + status1 + ", Errors: " + error_Count);
         }
 
+    }
+    public static String create_mixed_file() throws Exception {
 
+        String filePath = System.getProperty("user.dir") + "/testdata/mixed_Individual_File.xlsx";
+
+        Workbook wb = new XSSFWorkbook();
+        Sheet sheet = wb.createSheet("Customers");
+
+        String[] headers = {
+            "Customer Name", "Phone", "Email address",
+            "Address Line1", "Address Line2", "Address Line3",
+            "DOB", "Phone2", "Grade"
+        };
+
+        Row header = sheet.createRow(0);
+        for (int i = 0; i < headers.length; i++) {
+            header.createCell(i).setCellValue(headers[i]);
+        }
+
+        // Row 1 → VALID
+        Row r1 = sheet.createRow(1);
+        r1.createCell(0).setCellValue(getUniqueName());
+        r1.createCell(1).setCellValue(getUniquePhone());
+        r1.createCell(3).setCellValue("Kannur");
+        r1.createCell(8).setCellValue("Suspect");
+
+        // Row 2 → INVALID (missing phone)
+        Row r2 = sheet.createRow(2);
+        r2.createCell(0).setCellValue("John Doe");
+        r2.createCell(3).setCellValue("Home address");
+        r2.createCell(8).setCellValue("Suspect");
+
+        FileOutputStream fos = new FileOutputStream(filePath);
+        wb.write(fos);
+        wb.close();
+        fos.close();
+
+        return filePath;
+    }
+    
+    public void upload_mixed_ind_customer() throws Exception {
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
+        Thread.sleep(2000);
+
+        // Select branch
+        Select select = new Select(driver.findElement(branch));
+        select.selectByIndex(1);
+
+        // Create mixed file
+        String filePath = create_mixed_file();
+
+        // Upload
+        driver.findElement(upload_file).sendKeys(filePath);
+        driver.findElement(upload_btn).click();
+
+        Thread.sleep(1000);
+
+        WebElement row = wait.until(ExpectedConditions.visibilityOfElementLocated(firstRow));
+
+        String status = row.findElement(upload_status).getText().trim();
+        String errorCount = row.findElement(table_error).getText().trim();
+
+        System.out.println("Status : " + status + " :: Errors : " + errorCount);
+
+        if (status.equalsIgnoreCase("Has Error") && Integer.parseInt(errorCount) > 0) {
+            test3.log(Status.PASS, "Mixed file handled correctly (valid + invalid rows)");
+        } else {
+            test3.log(Status.FAIL, "Mixed file validation failed. Status: " + status + ", Errors: " + errorCount);
+        }
     }
 	
 }

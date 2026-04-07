@@ -186,12 +186,13 @@ public class ERP_Test {
 	
 	@Test(priority = 14)
 	public void individual_customer_upload() throws Exception {
-		test = extent.createTest("Individual customer upload without branch");
+		test = extent.createTest("Individual customer upload");
 		Ind_Cust_Upload ind = new pages.Ind_Cust_Upload(driver,test);
 		ind.without_branch();
 		ind.without_file();
 		ind.upload_valid_ind_customer();
 		ind.upload_invalid_ind_customer();
+		ind.upload_mixed_ind_customer();
 	}
 	
 	@AfterTest
