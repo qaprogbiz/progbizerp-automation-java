@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Progbiz ERP Upload Suite">
+    <test name="Customer Modules">
+        <groups>
+            <run>
+                <include name="login"/>
+                <include name="IndividualCustomer"/>
+                <include name="BusinessCustomer"/>
+            </run>
+        </groups>
+        <classes>
+            <class name="test.ERP_Test"/> 
+        </classes>
+    </test>
+</suite>

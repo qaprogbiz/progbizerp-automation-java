@@ -147,6 +147,8 @@ public class Ind_Cust_Upload {
 
 //      test3.log(Status.INFO, "Individual customer file uploaded");
         Thread.sleep(2000);
+        driver.navigate().refresh();
+        Thread.sleep(1000);
 
         WebElement row = wait.until(ExpectedConditions.visibilityOfElementLocated(firstRow));
 
@@ -223,7 +225,8 @@ public class Ind_Cust_Upload {
         driver.findElement(upload_btn).click();
         
         Thread.sleep(1000);
-        
+        driver.navigate().refresh();
+        Thread.sleep(1000);
         WebElement row = wait.until(ExpectedConditions.visibilityOfElementLocated(firstRow));
 
         String status1 = row.findElement(upload_status).getText().trim();
@@ -294,7 +297,9 @@ public class Ind_Cust_Upload {
         driver.findElement(upload_btn).click();
 
         Thread.sleep(1000);
-
+        driver.navigate().refresh();
+        Thread.sleep(1000);
+        
         WebElement row = wait.until(ExpectedConditions.visibilityOfElementLocated(firstRow));
 
         String status = row.findElement(upload_status).getText().trim();

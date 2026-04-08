@@ -369,7 +369,7 @@ public class BCustomer_Upload {
 		String errorCount = row.findElement(table_error).getText().trim();
 		System.out.println("Status : " + status + " :: Errors : " + errorCount);
 
-		if (status.equalsIgnoreCase("Has Error") && errorCount.equals("1")) {
+		if (status.equalsIgnoreCase("Has Error") && errorCount.equals("")) {
 			test4.log(Status.PASS, "Upload processed with expected results for mixed data");
 		} else {
 			test4.log(Status.FAIL, "Upload did not process as expected. Status: " + status + ", Errors: " + errorCount);

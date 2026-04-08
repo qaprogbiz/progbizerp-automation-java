@@ -37,7 +37,7 @@ public class ERP_Test {
 	ExtentReports extent;
 	boolean isDataDriven = false;
 
-	@BeforeTest
+	@BeforeTest(alwaysRun = true)
 	public void urlloading() {
 
 		reporter = new ExtentHtmlReporter("./Reporter/ERP CRM Report.html");
@@ -76,13 +76,11 @@ public class ERP_Test {
 		ddt.data_driven_test();
 	}
 
-	@Test(priority = 1)
+	@Test(priority = 1, groups = {"login"}) 
 	public void login_test() throws Exception {
-
-		test = extent.createTest("Login with valid credentials");
-		Login lg = new Login(driver, test);
-		lg.login();
-
+	    test = extent.createTest("Login with valid credentials");
+	    Login lg = new Login(driver, test);
+	    lg.login();
 	}
 	
 //	@Test(priority = 2)
@@ -184,38 +182,90 @@ public class ERP_Test {
 		task.task();
 	}
 	
-	@Test(priority = 14)
-	public void individual_customer_upload() throws Exception {
-		test = extent.createTest("Individual customer upload");
-		Ind_Cust_Upload ind = new pages.Ind_Cust_Upload(driver,test);
-		ind.without_branch();
-		ind.without_file();
-		ind.upload_valid_ind_customer();
-		ind.upload_invalid_ind_customer();
-		ind.upload_mixed_ind_customer();
-	}
-	
-	@Test(priority = 15)
-	public void business_customer_upload() throws Exception {
-        test = extent.createTest("Business customer upload");
-        pages.BCustomer_Upload bus = new pages.BCustomer_Upload(driver,test);
+	// --- MODULE: INDIVIDUAL CUSTOMER UPLOAD ---
+
+    @Test(priority = 14, groups = {"IndividualCustomer"})
+    public void ind_upload_without_branch() throws Exception {
+        test = extent.createTest("Ind. Customer: Missing Branch Validation");
+        pages.Ind_Cust_Upload ind = new pages.Ind_Cust_Upload(driver, test);
+        ind.without_branch();
+    }
+
+    @Test(priority = 15, groups = {"IndividualCustomer"})
+    public void ind_upload_without_file() throws Exception {
+        test = extent.createTest("Ind. Customer: Missing File Validation");
+        pages.Ind_Cust_Upload ind = new pages.Ind_Cust_Upload(driver, test);
+        ind.without_file();
+    }
+
+    @Test(priority = 16, groups = {"IndividualCustomer"})
+    public void ind_upload_valid_data() throws Exception {
+        test = extent.createTest("Ind. Customer: Valid Bulk Upload");
+        pages.Ind_Cust_Upload ind = new pages.Ind_Cust_Upload(driver, test);
+        ind.upload_valid_ind_customer();
+    }
+
+    @Test(priority = 17, groups = {"IndividualCustomer"})
+    public void ind_upload_invalid_data() throws Exception {
+        test = extent.createTest("Ind. Customer: Invalid Data Validation");
+        pages.Ind_Cust_Upload ind = new pages.Ind_Cust_Upload(driver, test);
+        ind.upload_invalid_ind_customer();
+    }
+
+    @Test(priority = 18, groups = {"IndividualCustomer"})
+    public void ind_upload_mixed_data() throws Exception {
+        test = extent.createTest("Ind. Customer: Mixed Data Handling");
+        pages.Ind_Cust_Upload ind = new pages.Ind_Cust_Upload(driver, test);
+        ind.upload_mixed_ind_customer();
+    }
+
+    // --- MODULE: BUSINESS CUSTOMER UPLOAD ---
+
+    @Test(priority = 19, groups = {"BusinessCustomer"})
+    public void bus_upload_without_branch() throws Exception {
+        test = extent.createTest("Bus. Customer: Missing Branch Validation");
+        pages.BCustomer_Upload bus = new pages.BCustomer_Upload(driver, test);
         bus.excelUploadMenu();
         bus.uploadWithoutBranch();
+    }
+
+    @Test(priority = 20, groups = {"BusinessCustomer"})
+    public void bus_upload_without_file() throws Exception {
+        test = extent.createTest("Bus. Customer: Missing File Validation");
+        pages.BCustomer_Upload bus = new pages.BCustomer_Upload(driver, test);
         bus.uploadWithoutFile();
+    }
+
+    @Test(priority = 21, groups = {"BusinessCustomer"})
+    public void bus_upload_valid_data() throws Exception {
+        test = extent.createTest("Bus. Customer: Valid Bulk Upload");
+        pages.BCustomer_Upload bus = new pages.BCustomer_Upload(driver, test);
         bus.uploadValidBusinessCustomer();
+    }
+
+    @Test(priority = 22, groups = {"BusinessCustomer"})
+    public void bus_upload_invalid_data() throws Exception {
+        test = extent.createTest("Bus. Customer: Invalid Data Validation");
+        pages.BCustomer_Upload bus = new pages.BCustomer_Upload(driver, test);
         bus.uploadInvalidBusinessCustomer();
+    }
+
+    @Test(priority = 23, groups = {"BusinessCustomer"})
+    public void bus_upload_mixed_data() throws Exception {
+        test = extent.createTest("Bus. Customer: Mixed Data Handling");
+        pages.BCustomer_Upload bus = new pages.BCustomer_Upload(driver, test);
         bus.uploadMixedBusinessCustomer();
     }
 	
-	@AfterTest
+	@AfterTest(alwaysRun = true)
 	public void teardown() {
 		extent.flush();
 	}
 
-	@AfterMethod
+	@AfterMethod(alwaysRun = true)
 	public void afterMethod(ITestResult result) throws IOException {
 
-	    // 🔒 If this test has child nodes, it is a data-driven test
+	    //  If this test has child nodes, it is a data-driven test
 	    if (test.getModel().hasChildren()) {
 
 	        // Log only if the method itself crashed
@@ -224,10 +274,10 @@ public class ERP_Test {
 	                    "Data-driven test crashed: " + result.getThrowable());
 	        }
 
-	        return; // ⛔ absolutely nothing else must run
+	        return; 
 	    }
 
-	    // ✅ Normal (non data-driven) tests only
+	    //  Normal (non data-driven) tests only
 	    String methodName = result.getMethod().getMethodName();
 
 	    if (result.getStatus() == ITestResult.FAILURE) {
@@ -259,16 +309,13 @@ public class ERP_Test {
 
 
 
-	public static String screenshotMethod(WebDriver driver, String screenshotName) throws IOException {
-
+	public static String screenshotMethod(WebDriver driver, String screenshotname) throws IOException {
 	    File src = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
-
-	    String destination = "Screenshot/" + screenshotName + ".png";
-	    File destFile = new File(System.getProperty("user.dir"), destination);
-
+	    String destination = System.getProperty("user.dir") + "/Screenshot/" + screenshotname + ".png";
+	    File destFile = new File(destination);
+	    destFile.getParentFile().mkdirs(); // Ensure directory exists
 	    FileHandler.copy(src, destFile);
-
-	    return destination; // 🔑 relative path
+	    return destination;
 	}
 
 
