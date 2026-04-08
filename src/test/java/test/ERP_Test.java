@@ -203,8 +203,8 @@ public class ERP_Test {
         bus.uploadWithoutBranch();
         bus.uploadWithoutFile();
         bus.uploadValidBusinessCustomer();
-//        bus.uploadInvalidBusinessCustomer();
-//        bus.uploadMixedBusinessCustomer();
+        bus.uploadInvalidBusinessCustomer();
+        bus.uploadMixedBusinessCustomer();
     }
 	
 	@AfterTest
