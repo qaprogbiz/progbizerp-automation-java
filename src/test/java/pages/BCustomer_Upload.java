@@ -1,8 +1,6 @@
 package pages;
 
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.time.Duration;
 import java.util.Random;
 import java.util.UUID;
@@ -27,7 +25,6 @@ public class BCustomer_Upload {
 	WebDriver driver;
 	ExtentTest test4;
 	
-//	Object repository
 //	Object repository
 	By excel_upload_menu = By.id("nav-excel-upload");
 	By business_upload_btn = By.id("nav-excel-upload-business-customer");

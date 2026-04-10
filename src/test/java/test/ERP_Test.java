@@ -24,7 +24,7 @@ import com.aventstack.extentreports.reporter.ExtentHtmlReporter;
 import com.aventstack.extentreports.reporter.configuration.Theme;
 
 import pages.Enquiry;
-import pages.Ind_Cust_Upload;
+import pages.Enquiry_Upload;
 import pages.Login;
 import pages.Quotation;
 import pages.Task;
@@ -83,7 +83,7 @@ public class ERP_Test {
 	    lg.login();
 	}
 	
-//	@Test(priority = 2)
+	@Test(priority = 2)
 	public void enquiry_create() throws Exception {
 
 		test = extent.createTest("Create enquiry");
@@ -91,7 +91,7 @@ public class ERP_Test {
 		enq.enquiry();
 	}
 
-//	@Test(priority = 3)
+	@Test(priority = 3)
 	public void enquiry_overview() throws Exception {
 
 		test = extent.createTest("Enquiry overview");
@@ -100,7 +100,7 @@ public class ERP_Test {
 
 	}
 
-//	@Test(priority = 4)
+	@Test(priority = 4)
 	public void edit_enquiry() throws Exception {
 		test = extent.createTest("Edit enquiry");
 		Enquiry enq = new Enquiry(driver, test);
@@ -108,7 +108,7 @@ public class ERP_Test {
 
 	}
 
-//	@Test(priority = 5)
+	@Test(priority = 5)
 	public void followup_from_enquiry_overiew() throws Exception {
 
 		test = extent.createTest("Enquiry followup from the enquiry overview");
@@ -117,7 +117,7 @@ public class ERP_Test {
 
 	}
 
-//	@Test(priority = 6)
+	@Test(priority = 6)
 	public void followup_details() throws Exception {
 
 		test = extent.createTest("Edit and delete a followup");
@@ -134,7 +134,7 @@ public class ERP_Test {
 		enq.enquiry_delete();
 	}
 
-//	@Test(priority = 8)
+	@Test(priority = 8)
 	public void enquiry_hot() throws Exception {
 
 		test = extent.createTest("Make enquiry hot");
@@ -142,7 +142,7 @@ public class ERP_Test {
 		enq.enquiry_hot_followup();
 	}
 
-//	@Test(priority = 9)
+	@Test(priority = 9)
 	public void quotation() throws Exception {
 
 		test = extent.createTest("Quotation Test");
@@ -150,7 +150,7 @@ public class ERP_Test {
 		qt.quotation();
 	}
 
-//	@Test(priority = 10)
+	@Test(priority = 10)
 	public void edit_quotation() throws Exception {
 
 		test = extent.createTest("Edit Quotation");
@@ -158,7 +158,7 @@ public class ERP_Test {
 		qt.edit_quotation();
 	}
 
-//	@Test(priority = 11)
+	@Test(priority = 11)
 	public void view_quotation() throws Exception {
 
 		test = extent.createTest("View Quotation");
@@ -166,7 +166,7 @@ public class ERP_Test {
 		qt.view_quotation();
 	}
 
-//	@Test(priority = 12)
+	@Test(priority = 12)
 	public void quotation_followup() throws Exception {
 
 		test = extent.createTest("Quotation Followup");
@@ -174,7 +174,7 @@ public class ERP_Test {
 		qt.quotation_followup();
 	}
 
-//	@Test(priority = 13)
+	@Test(priority = 13)
 	public void task_test() throws Exception {
 		test=extent.createTest("Instant task creation and end");
 		Task task= new Task(driver);
@@ -257,6 +257,46 @@ public class ERP_Test {
         bus.uploadMixedBusinessCustomer();
     }
 	
+    // --- MODULE: BUSINESS CUSTOMER UPLOAD ---
+
+    @Test(priority = 24, groups = {"EnquiryUpload"})
+    public void enq_upload_without_branch() throws Exception {
+        test = extent.createTest("Enquiry upload : Missing Branch Validation");
+        Enquiry_Upload enq = new Enquiry_Upload(driver, test);
+        enq.enquiryExcelUploadMenu();
+        enq.uploadWithoutBranch();
+    }
+    
+    @Test(priority = 25, groups = {"EnquiryUpload"})
+    public void enq_upload_without_file() throws Exception {
+        test = extent.createTest("Enquiry upload : Missing File Validation");
+        Enquiry_Upload enq = new Enquiry_Upload(driver, test);
+        enq.enquiryExcelUploadMenu();
+        enq.uploadWithoutFile();
+    }
+
+    @Test(priority = 26, groups = {"EnquiryUpload"})
+    public void enq_upload_valid_file() throws Exception {
+        test = extent.createTest("Enquiry upload : Valid Enquiey File Upload");
+        Enquiry_Upload enq = new Enquiry_Upload(driver, test);
+        enq.enquiryExcelUploadMenu();
+        enq.uploadValidEnquiryFile();
+    }
+
+    @Test(priority = 27, groups = {"EnquiryUpload"})
+    public void enq_upload_invalid_file() throws Exception {
+        test = extent.createTest("Enquiry upload : Invalid Enquiey File Upload");
+        Enquiry_Upload enq = new Enquiry_Upload(driver, test);
+        enq.upload_invalid_enquiry_file();
+    }
+    
+    @Test(priority = 28, groups = {"EnquiryUpload"})
+    public void enq_upload_mixed_file() throws Exception {
+        test = extent.createTest("Enquiry upload : Invalid Enquiey File Upload");
+        Enquiry_Upload enq = new Enquiry_Upload(driver, test);
+        enq.upload_mixed_data_file();
+    }
+    
 	@AfterTest(alwaysRun = true)
 	public void teardown() {
 		extent.flush();

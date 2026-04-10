@@ -5,8 +5,9 @@
         <groups>
             <run>
                 <include name="login"/>
-                <include name="IndividualCustomer"/>
-                <include name="BusinessCustomer"/>
+                <exclude name="IndividualCustomer"/>
+                <exclude name="BusinessCustomer"/>
+                <include name="EnquiryUpload"/>
             </run>
         </groups>
         <classes>
