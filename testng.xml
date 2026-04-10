@@ -4,10 +4,11 @@
     <test name="Customer Modules">
         <groups>
             <run>
-                <include name="login"/>
-                <exclude name="IndividualCustomer"/>
-                <exclude name="BusinessCustomer"/>
+				<include name="login"/>
+                <include name="IndividualCustomer"/>
+                <include name="BusinessCustomer"/>
                 <include name="EnquiryUpload"/>
+                <include name="ItemUpload"/>
             </run>
         </groups>
         <classes>

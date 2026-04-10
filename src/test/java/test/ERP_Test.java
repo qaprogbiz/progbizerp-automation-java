@@ -25,6 +25,7 @@ import com.aventstack.extentreports.reporter.configuration.Theme;
 
 import pages.Enquiry;
 import pages.Enquiry_Upload;
+import pages.Item_Upload;
 import pages.Login;
 import pages.Quotation;
 import pages.Task;
@@ -257,7 +258,7 @@ public class ERP_Test {
         bus.uploadMixedBusinessCustomer();
     }
 	
-    // --- MODULE: BUSINESS CUSTOMER UPLOAD ---
+    // --- MODULE: ENQUIRY UPLOAD ---
 
     @Test(priority = 24, groups = {"EnquiryUpload"})
     public void enq_upload_without_branch() throws Exception {
@@ -271,15 +272,13 @@ public class ERP_Test {
     public void enq_upload_without_file() throws Exception {
         test = extent.createTest("Enquiry upload : Missing File Validation");
         Enquiry_Upload enq = new Enquiry_Upload(driver, test);
-        enq.enquiryExcelUploadMenu();
         enq.uploadWithoutFile();
     }
 
     @Test(priority = 26, groups = {"EnquiryUpload"})
     public void enq_upload_valid_file() throws Exception {
-        test = extent.createTest("Enquiry upload : Valid Enquiey File Upload");
+        test = extent.createTest("Enquiry upload : Valid Enquiry File Upload");
         Enquiry_Upload enq = new Enquiry_Upload(driver, test);
-        enq.enquiryExcelUploadMenu();
         enq.uploadValidEnquiryFile();
     }
 
@@ -295,6 +294,44 @@ public class ERP_Test {
         test = extent.createTest("Enquiry upload : Invalid Enquiey File Upload");
         Enquiry_Upload enq = new Enquiry_Upload(driver, test);
         enq.upload_mixed_data_file();
+    }
+
+    // --- MODULE: ITEM UPLOAD ---
+    
+    @Test(priority = 29, groups = {"ItemUpload"})
+    public void item_upload_without_branch() throws Exception {
+        test = extent.createTest("Item upload : Missing Branch Validation");
+        Item_Upload enq = new Item_Upload(driver, test);
+        enq.itemExcelUploadMenu();
+        enq.uploadWithoutBranch();
+    }
+    
+    @Test(priority = 30, groups = {"ItemUpload"})
+    public void item_upload_without_file() throws Exception {
+        test = extent.createTest("Item upload : Missing File Validation");
+        Item_Upload enq = new Item_Upload(driver, test);
+        enq.uploadWithoutFile();
+    }
+
+    @Test(priority = 31, groups = {"ItemUpload"})
+    public void item_upload_valid_file() throws Exception {
+        test = extent.createTest("Item upload : Valid Item File Upload");
+        Item_Upload enq = new Item_Upload(driver, test);
+        enq.upload_valid_item();
+    }
+
+    @Test(priority = 32, groups = {"ItemUpload"})
+    public void item_upload_invalid_file() throws Exception {
+        test = extent.createTest("Item upload : Invalid Item File Upload");
+        Item_Upload enq = new Item_Upload(driver, test);
+        enq.upload_invalid_item();
+    }
+    
+    @Test(priority = 33, groups = {"ItemUpload"})
+    public void item_upload_mixed_file() throws Exception {
+        test = extent.createTest("Item upload : Invalid Item File Upload");
+        Item_Upload enq = new Item_Upload(driver, test);
+        enq.upload_mixed_item();
     }
     
 	@AfterTest(alwaysRun = true)

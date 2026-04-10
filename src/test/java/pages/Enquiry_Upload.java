@@ -69,7 +69,7 @@ public class Enquiry_Upload {
 		
 	public void uploadWithoutBranch() throws Exception {
 		Thread.sleep(2000);
-
+		driver.findElement(enquiry_upload_btn).click();
 		driver.findElement(upload_btn).click();
 		Thread.sleep(2000);
 		WebElement Branch_Validation = driver.findElement(branch_validation);
