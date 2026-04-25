@@ -102,11 +102,11 @@ public class Login {
 		WebDriverWait wait=new WebDriverWait(driver, Duration.ofSeconds(20));
 		wait.until(ExpectedConditions.visibilityOfElementLocated(company_code)).click();
 		
-		driver.findElement(company_code).sendKeys("JMTEST");
+		driver.findElement(company_code).sendKeys("JM_TEST");
 		driver.findElement(username).sendKeys("Admin");
 		driver.findElement(password).sendKeys("123");
 		
-		test1.log(Status.PASS, "Company code : JMTEST");
+		test1.log(Status.PASS, "Company code : JM_TEST");
 		test1.log(Status.PASS, "Username : Admin");
 		test1.log(Status.PASS, "Password : 123");
 		

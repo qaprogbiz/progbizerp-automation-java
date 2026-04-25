@@ -64,7 +64,7 @@ public class ERP_Test {
 
 		driver.manage().window().maximize();
 		driver.manage().deleteAllCookies();
-		driver.get("https://erptest.prog-biz.com/");
+		driver.get("https://erptest.progbiz.in/");
 
 	}
 	
